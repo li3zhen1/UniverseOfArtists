@@ -157,16 +157,13 @@ function _link(links) {
             }
         }
     }
-
     function initialize() {
         if (!nodes) return;
-
         var i,
             n = nodes.length,
             m = links.length,
             nodeById = d3.map(nodes, id),
             link;
-
         for (i = 0, count = new Array(n); i < m; ++i) {
             link = links[i], link.index = i;
             if (typeof link.source !== "object") link.source = find(nodeById, link.source);
@@ -174,15 +171,12 @@ function _link(links) {
             count[link.source.index] = (count[link.source.index] || 0) + 1;
             count[link.target.index] = (count[link.target.index] || 0) + 1;
         }
-
         for (i = 0, bias = new Array(m); i < m; ++i) {
             link = links[i], bias[i] = count[link.source.index] / (count[link.source.index] + count[link.target.index]);
         }
-
         strengths = new Array(m), initializeStrength();
         distances = new Array(m), initializeDistance();
     }
-
     function initializeStrength() {
         if (!nodes) return;
 
@@ -190,7 +184,6 @@ function _link(links) {
             strengths[i] = +strength(links[i], i, links);
         }
     }
-
     function initializeDistance() {
         if (!nodes) return;
 
@@ -198,25 +191,19 @@ function _link(links) {
             distances[i] = +distance(links[i], i, links);
         }
     }
-
     force.initialize = function(tmp) {
         nodes = tmp;
         initialize();
     };
-
     force.links = function(tmp) {
         return arguments.length ? (links = tmp, initialize(), force) : links;
     };
-
-
     force.strength = function(tmp) {
         return arguments.length ? (strength = typeof tmp === "function" ? tmp : constant$6(+tmp), initializeStrength(), force) : strength;
     };
-
     force.distance = function(tmp) {
         return arguments.length ? (distance = typeof tmp === "function" ? tmp : constant$6(+tmp), initializeDistance(), force) : distance;
     };
-
     return force;
 }
 var graphContainer = renderForceDirectedGraph();
@@ -289,7 +276,7 @@ d3.json("data/connections.json", function(error, data) {
                             .attr('class', 'link')
                     }
                 })
-                d3.select('.imagefit').attr('src', 'resource/' + d.id + '.jpg')
+                d3.select('.imagefit').attr('src', 'resource/images/' + d.id + '.jpg')
                 document.getElementById('ArtistLink').innerHTML = linkNum;
                 document.getElementById('ArtistName').innerHTML = graph.nodes[d.id].name;
                 document.getElementById('ArtistBirth').innerHTML = artistInfo[d.id].birth_date + ', in ' + artistInfo[d.id].birth_place;
