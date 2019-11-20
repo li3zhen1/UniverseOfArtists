@@ -1,9 +1,7 @@
-var svg = d3.select("svg").attr('width', window.innerWidth)
+var svg = d3.select("svg").attr('width', Math.max(window.innerWidth,1300))
 width = +svg.attr("width"),
     height = +svg.attr("height");
-
 var color = d3.scaleOrdinal(d3.schemeCategory20);
-
 var forceGraph_Configs = {
     startRatio: 1,
     endRatio: 0.001,
@@ -17,13 +15,11 @@ var forceGraph_Configs = {
     strengthRatio: 1
 }
 var edgeNum;
-
-function constant$6(x) {
+function retOrig(x) {
     return function() {
         return x;
     };
 }
-
 function index(d) {
     return d.index;
 }
@@ -126,7 +122,7 @@ var strength;
 var distances;
 
 
-function _link(links) {
+function calLink(links) {
 
     var id = index,
         distance,
@@ -199,10 +195,10 @@ function _link(links) {
         return arguments.length ? (links = tmp, initialize(), force) : links;
     };
     force.strength = function(tmp) {
-        return arguments.length ? (strength = typeof tmp === "function" ? tmp : constant$6(+tmp), initializeStrength(), force) : strength;
+        return arguments.length ? (strength = typeof tmp === "function" ? tmp : retOrig(+tmp), initializeStrength(), force) : strength;
     };
     force.distance = function(tmp) {
-        return arguments.length ? (distance = typeof tmp === "function" ? tmp : constant$6(+tmp), initializeDistance(), force) : distance;
+        return arguments.length ? (distance = typeof tmp === "function" ? tmp : retOrig(+tmp), initializeDistance(), force) : distance;
     };
     return force;
 }
@@ -217,7 +213,7 @@ var isChosen = false;
 var highlightedId = -1;
 d3.json("data/connections.json", function(error, data) {
     if (error) throw error;
-    graphContainer.force("link", _link().distance(20).strength(0.2))
+    graphContainer.force("link", calLink().distance(20).strength(0.2))
         .force("charge", d3.forceManyBody())
         .force("center", d3.forceCenter(680, 420));
     graph = data;
