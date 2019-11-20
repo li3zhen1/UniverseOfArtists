@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <style>
+        @font-face {
+            font-family: 'ProductSans';
+            src: url("resource/ProductSansBold.ttf") format("truetype");
+        }
+        
+        @font-face {
+            font-family: 'ProductSansT';
+            src: url("resource/ProductSansRegular.ttf") format("truetype");
+        }
+        
+        @keyframes opacityTo0 {
+            from {}
+            to {
+                opacity: 0;
+            }
+        }
+        
+        @-moz-keyframes opacityTo0 {
+            from {}
+            to {
+                opacity: 0;
+            }
+        }
+        
+        @-webkit-keyframes opacityTo0 {
+            from {}
+            to {
+                opacity: 0;
+            }
+        }
+        
+        @-o-keyframes opacityTo0 {
+            from {}
+            to {
+                opacity: 0;
+            }
+        }
+        
+        @keyframes opacityTo1 {
+            from {}
+            to {
+                opacity: .9;
+            }
+        }
+        
+        @-moz-keyframes opacityTo1 {
+            from {}
+            to {
+                opacity: .9;
+            }
+        }
+        
+        @-webkit-keyframes opacityTo1 {
+            from {}
+            to {
+                opacity: .9;
+            }
+        }
+        
+        @-o-keyframes opacityTo1 {
+            from {}
+            to {
+                opacity: .9;
+            }
+        }
+        
+        @keyframes movePanel {
+            from {}
+            to {
+                right: 24px;
+                opacity: 1;
+            }
+        }
+        
+        @-moz-keyframes movePanel {
+            from {}
+            to {
+                right: 24px;
+                opacity: 1;
+            }
+        }
+        
+        @-webkit-keyframes movePanel {
+            from {}
+            to {
+                right: 24px;
+                opacity: 1;
+            }
+        }
+        
+        @-o-keyframes movePanel {
+            from {}
+            to {
+                right: 24px;
+                opacity: 1;
+            }
+        }
+        
+        .op0 {
+            animation: opacityTo0 1s;
+            -moz-animation: opacityTo0 1s;
+            -webkit-animation: opacityTo0 1s;
+            -o-animation: opacityTo0 1s;
+            animation-fill-mode: forwards;
+        }
+        
+        .op1 {
+            animation: opacityTo1 1s;
+            -moz-animation: opacityTo1 1s;
+            -webkit-animation: opacityTo1 1s;
+            -o-animation: opacityTo1 1s;
+            animation-fill-mode: forwards;
+        }
+        
+        body {
+            background: #faf9f8;
+            overflow: hidden;
+            font-family: "Segoe UI Web (West European)", Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, Helvetica Neue, sans-serif;
+        }
+        
+        svg {
+            position: absolute;
+            left: calc(50% - 768px);
+            top: calc(50% - 384px)
+        }
+        
+        .artistName {
+            user-select: none;
+            font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            font-size: 20px;
+            font-weight: 600;
+            color: rgb(15, 10, 10);
+            box-sizing: border-box;
+            box-shadow: none;
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 3px;
+            margin-left: 0px;
+            display: block;
+            padding-top: 0px;
+            padding-right: 0px;
+            padding-bottom: 0px;
+            padding-left: 0px;
+            overflow-wrap: break-word;
+        }
+        
+        .artistSubtitle {
+            user-select: none;
+            font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            font-size: 16px;
+            font-weight: 600;
+            color: rgba(255, 81, 12, 0.9);
+            box-sizing: border-box;
+            box-shadow: none;
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            margin-left: 0px;
+            display: block;
+            overflow-wrap: break-word;
+            padding-top: 6px;
+            padding-bottom: 1.5px;
+            line-height: 19px;
+        }
+        
+        .artistContent {
+            user-select: none;
+            font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgb(35, 32, 32);
+            box-sizing: border-box;
+            box-shadow: none;
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            margin-left: 0px;
+            display: block;
+            overflow-wrap: break-word;
+            padding-top: 1.5px;
+            padding-bottom: 6px;
+            line-height: 17px;
+        }
+        
+        .subtitle {
+            user-select: none;
+            font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            font-size: 18px;
+            font-weight: 600;
+            color: rgb(15, 10, 10);
+            box-sizing: border-box;
+            box-shadow: none;
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            margin-left: 0px;
+            display: block;
+            padding-top: 0px;
+            padding-right: 0px;
+            padding-bottom: 0px;
+            padding-left: 0px;
+            overflow-wrap: break-word;
+        }
+        
+        .msShadow {
+            box-shadow: 0 6.4px 14.4px 0 rgba(0, 0, 0, .132), 0 1.2px 3.6px 0 rgba(0, 0, 0, .108);
+        }
+        
+        .boxshadowedDiv {
+            animation: movePanel 1s;
+            -moz-animation: movePanel 1s;
+            -webkit-animation: movePanel 1s;
+            -o-animation: movePanel 1s;
+            animation-fill-mode: forwards;
+            border-radius: 3px;
+            box-shadow: 0 6.4px 14.4px 0 rgba(0, 0, 0, .132), 0 1.2px 3.6px 0 rgba(0, 0, 0, .108);
+            width: calc(16% + 60px);
+            padding: 20px 6px 10px 24px;
+            position: absolute;
+            bottom: 24px;
+            right: -480px;
+            opacity: 0;
+            background: rgba(255, 255, 255, .8)
+        }
+        
+        .boxshadowedDiv2 {
+            border-radius: 3px;
+            box-shadow: 0 6.4px 14.4px 0 rgba(0, 0, 0, .132), 0 1.2px 3.6px 0 rgba(0, 0, 0, .108);
+            width: calc(16% + 50px);
+            height: 348px;
+            padding: 20px 16px 20px 24px;
+            position: absolute;
+            top: 24px;
+            right: -480px;
+            opacity: 0;
+            background: rgba(255, 255, 255, .8)
+        }
+        
+        .boxshadowedDiv2-moved {
+            animation: movePanel 1s;
+            -moz-animation: movePanel 1s;
+            -webkit-animation: movePanel 1s;
+            -o-animation: movePanel 1s;
+            animation-fill-mode: forwards;
+        }
+        
+        .borderedNode {
+            stroke: #000000;
+            stroke-width: 2px
+        }
+        
+        .link {
+            fill: none;
+            stroke: rgba(190, 190, 190, .9)
+        }
+        
+        .link-highlight {
+            fill: none;
+            stroke: rgba(255, 81, 12, 0.9);
+            stroke-width: 1.8px
+        }
+        
+        .graphTitle {
+            font-size: 40px;
+            position: absolute;
+            font-family: 'ProductSans';
+        }
+        
+        .img {
+            border-radius: 0 0 3px 3px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 114px;
+            background: #e0e0e0;
+            overflow: hidden;
+        }
+        
+        .imagefit {
+            max-height: 100%;
+        }
+    </style>
+    <script src="lib/d3.v5.min.js"></script>
+</head>
+
+<body>
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1300" height="740" id="graphContainer">
+    </svg>
+    <div style="font-family: ProductSans;position: absolute; top:24px;left:24px;font-size: 40px;">
+        Connections between Artists
+    </div>
+    <div class="artistSubtitle" style="position: absolute; top:70px;left:26px;width:430px;line-height: 22px;">85 Nodes & 528 edges</div>
+
+    <div class="artistContent" style="position: absolute; top:100px;left:26px;width:430px;color:rgba(0, 0, 0, .5);line-height: 22px;">
+        This diagram maps the relationships among the artists. Vectors connect individuals whose acquaintance with one another during these years could be documented. Colors indicates the country where they were born.
+    </div>
+    <div class="boxshadowedDiv2">
+        <div id="ArtistName" class="artistName">-</div>
+        <div class="artistSubtitle">Connections</div>
+        <div id="ArtistLink" class="artistContent">-</div>
+        <div class="artistSubtitle">Born</div>
+        <div id="ArtistBirth" class="artistContent">-</div>
+        <div class="artistSubtitle">Died</div>
+        <div id="ArtistDeath" class="artistContent">-</div>
+        <div class="artistSubtitle">Likes</div>
+        <div id="ArtistLikes" class="artistContent">-</div>
+        <div class="img">
+            <img class="imagefit">
+        </div>
+    </div>
+    <div>
+        <div id="sliders" class="boxshadowedDiv" />
+    </div>
+    <script type="text/javascript" src="scripts/ReactBundle.tsx"></script>
+    <script type="text/javascript" src="scripts/index.js"></script>
+</body>
+
+</html>
