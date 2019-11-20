@@ -1,3 +1,7 @@
+document.body.addEventListener("touchmove", bodyScroll, false);
+function bodyScroll(event) {
+　　event.preventDefault();
+}
 var svg = d3.select("svg").attr('width', Math.max(window.innerWidth,1300))
 width = +svg.attr("width"),
     height = +svg.attr("height");
