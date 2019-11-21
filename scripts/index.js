@@ -1,7 +1,3 @@
-document.body.addEventListener("touchmove", bodyScroll, false);
-function bodyScroll(event) {
-　　event.preventDefault();
-}
 var svg = d3.select("svg").attr('width', Math.max(window.innerWidth,1300))
 width = +svg.attr("width"),
     height = +svg.attr("height");
@@ -27,20 +23,17 @@ function retOrig(x) {
 function index(d) {
     return d.index;
 }
-
 function find(nodeById, nodeId) {
     var node = nodeById.get(nodeId);
     if (!node) throw new Error("missing: " + nodeId);
     return node;
 }
-
 function renderForceDirectedGraph(nodes) {
     if (!nodes) nodes = [];
     var stepRatio = forceGraph_Configs.stepRatio;
     var stepper = d3.timer(step),
         field = d3.map(),
         event = d3.dispatch("tick", "end");
-
     function step() {
         tick();
         event.call("tick", forceGraph);
@@ -49,7 +42,6 @@ function renderForceDirectedGraph(nodes) {
             event.call("end", forceGraph);
         }
     }
-
     function tick() {
         forceGraph_Configs.startRatio += (forceGraph_Configs.stepRatio - forceGraph_Configs.startRatio) * forceGraph_Configs.damping_l;
         //if (forceGraph_Configs.startRatio < 0.18) forceGraph_Configs.startRatio = 0.3;
@@ -72,7 +64,6 @@ function renderForceDirectedGraph(nodes) {
                 node.y = node.fy, node.vy = 0;
         }
     }
-
     forceGraph = {
         nodes: function(tmp) {
             return (nodes = tmp, render_nodes(), field.each(render), forceGraph)
@@ -90,7 +81,6 @@ function renderForceDirectedGraph(nodes) {
             return stepper.restart(step), forceGraph;
         },
     };
-
     function render_nodes() {
         for (var i = 0, n = nodes.length, node; i < n; ++i) {
             node = nodes[i], node.index = i;
@@ -101,13 +91,11 @@ function renderForceDirectedGraph(nodes) {
             node.vx = node.vy = 0;
         }
     }
-
     function render(f) {
         if (f.initialize)
             f.initialize(nodes);
         return f;
     }
-
     for (var i = 0, n = nodes.length, node; i < n; ++i) {
         node = nodes[i], node.index = i;
         var radius = forceGraph_Configs.initialRadius * Math.sqrt(i),
@@ -116,31 +104,19 @@ function renderForceDirectedGraph(nodes) {
         node.y = radius * Math.sin(angle);
         node.vx = node.vy = 0;
     }
-
     return forceGraph;
 }
-
-
 var strengths;
 var strength;
 var distances;
-
-
 function calLink(links) {
-
     var id = index,
         distance,
         nodes,
         count,
         bias,
         iterations = 1;
-
     if (links == null) links = [];
-
-    function defaultStrength(link) {
-        return 1 / Math.min(count[link.source.index], count[link.target.index]);
-    }
-
     function force(alpha) {
         for (var k = 0, n = links.length; k < iterations; ++k) {
             for (var i = 0, link, source, target, x, y, l, b; i < n; ++i) {
@@ -179,14 +155,12 @@ function calLink(links) {
     }
     function initializeStrength() {
         if (!nodes) return;
-
         for (var i = 0, n = links.length; i < n; ++i) {
             strengths[i] = +strength(links[i], i, links);
         }
     }
     function initializeDistance() {
         if (!nodes) return;
-
         for (var i = 0, n = links.length; i < n; ++i) {
             distances[i] = +distance(links[i], i, links);
         }
@@ -368,6 +342,7 @@ function dragended(d) {
     for (var i = 0; i < edgeNum; i++)
         d3.select("#link" + i)
         .attr('class', 'link')
+    d3.select("#name" + d.id).attr('class', 'op0')
     if (!d3.event.active) graphContainer.stepRatio(0);
     d.fx = null, d.fy = null;
 }
