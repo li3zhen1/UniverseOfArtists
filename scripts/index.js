@@ -1,7 +1,8 @@
-var svg = d3.select("svg").attr('width', Math.max(window.innerWidth,1300))
+var svg = d3.select("svg").attr('width', Math.max(window.innerWidth, 1600))
 width = +svg.attr("width"),
     height = +svg.attr("height");
-var color = d3.scaleOrdinal(d3.schemeCategory20);
+const colorSet = ['#ffcdd2', '#ff8a65', '#ffb300', '#ff9800', '#ff4081', '#d500f9', '#512da8', '#536dfe', '#2196f3',
+    '#26c6da', '#00695c', '#1de9b6', '#00e676', '#ffeb3b', '#c6ff00', '#c51162', '#f4511e', '#ef5350', '#f48fb1', '#ffcc80', '#90a4ae', '#33691e']
 var forceGraph_Configs = {
     startRatio: 1,
     endRatio: 0.001,
@@ -16,7 +17,7 @@ var forceGraph_Configs = {
 }
 var edgeNum;
 function retOrig(x) {
-    return function() {
+    return function () {
         return x;
     };
 }
@@ -45,7 +46,7 @@ function renderForceDirectedGraph(nodes) {
     function tick() {
         forceGraph_Configs.startRatio += (forceGraph_Configs.stepRatio - forceGraph_Configs.startRatio) * forceGraph_Configs.damping_l;
         //if (forceGraph_Configs.startRatio < 0.18) forceGraph_Configs.startRatio = 0.3;
-        field.each(function(force) {
+        field.each(function (force) {
             force(forceGraph_Configs.startRatio);
         });
         var node;
@@ -65,19 +66,19 @@ function renderForceDirectedGraph(nodes) {
         }
     }
     forceGraph = {
-        nodes: function(tmp) {
+        nodes: function (tmp) {
             return (nodes = tmp, render_nodes(), field.each(render), forceGraph)
         },
-        stepRatio: function(tmp) {
+        stepRatio: function (tmp) {
             return arguments.length ? (stepRatio = +tmp, forceGraph) : forceGraph_Configs.stepRatio;
         },
-        force: function(name, tmp) {
+        force: function (name, tmp) {
             return arguments.length > 1 ? (field.set(name, render(tmp)), forceGraph) : field.get(name);
         },
-        on: function(name, tmp) {
+        on: function (name, tmp) {
             return arguments.length > 1 ? (event.on(name, tmp), forceGraph) : event.on(name);
         },
-        restart: function() {
+        restart: function () {
             return stepper.restart(step), forceGraph;
         },
     };
@@ -165,47 +166,41 @@ function calLink(links) {
             distances[i] = +distance(links[i], i, links);
         }
     }
-    force.initialize = function(tmp) {
+    force.initialize = function (tmp) {
         nodes = tmp;
         initialize();
     };
-    force.links = function(tmp) {
+    force.links = function (tmp) {
         return arguments.length ? (links = tmp, initialize(), force) : links;
     };
-    force.strength = function(tmp) {
+    force.strength = function (tmp) {
         return arguments.length ? (strength = typeof tmp === "function" ? tmp : retOrig(+tmp), initializeStrength(), force) : strength;
     };
-    force.distance = function(tmp) {
+    force.distance = function (tmp) {
         return arguments.length ? (distance = typeof tmp === "function" ? tmp : retOrig(+tmp), initializeDistance(), force) : distance;
     };
     return force;
 }
 var graphContainer = renderForceDirectedGraph();
-
-
 var graph = {
     nodes: [],
     links: []
 }
-var isChosen = false;
 var highlightedId = -1;
-d3.json("data/connections.json", function(error, data) {
+d3.json("data/connections.json", function (error, data) {
     if (error) throw error;
     graphContainer.force("link", calLink().distance(20).strength(0.2))
         .force("charge", d3.forceManyBody())
         .force("center", d3.forceCenter(680, 420));
     graph = data;
     edgeNum = data.links.length;
-
-
     var nodes = graph.nodes,
-        nodeById = d3.map(nodes, function(d) {
+        nodeById = d3.map(nodes, function (d) {
             return d.id;
         }),
         links = graph.links,
         bilinks = [];
-
-    links.forEach(function(link) {
+    links.forEach(function (link) {
         var s = link.source = nodeById.get(link.source),
             t = link.target = nodeById.get(link.target),
             i = {};
@@ -219,37 +214,52 @@ d3.json("data/connections.json", function(error, data) {
         });
         bilinks.push([s, i, t]);
     });
-
     var link = svg.selectAll(".link")
         .data(bilinks)
         .enter().append("path")
         .attr("class", "link")
-        .attr("id", function(e, i) { return "link" + i })
-        //.attr('stroke', 'rgba(190, 190, 190, .9)')
-
+        .attr("id", function (e, i) { return "link" + i })
     var node = svg.selectAll(".node")
-        .data(nodes.filter(function(d) {
+        .data(nodes.filter(function (d) {
             return d.id;
         }))
         .enter()
-        .append("g").attr("id", function(d) {
+        .append("g").attr("id", function (d) {
             return "node" + d.id;
         })
-        .on('mouseover', function(d) {
+        .on('mouseover', function (d) {
             d3.select('.boxshadowedDiv2').classed('boxshadowedDiv2-moved', true);
             if (!lockedLink) {
                 var linkNum = 0;
+                var linkSet = [];
                 d3.select("#name" + d.id).attr('class', 'op1')
-                graph.links.slice(0, edgeNum).forEach(function(t, i) {
+
+                graph.links.slice(0, edgeNum).forEach(function (t, i) {
                     if (t.source.id == d.id || t.target.id == d.id) {
                         d3.select("#link" + i)
                             .attr('class', 'link-highlight')
                         linkNum++;
+                        if (linkSet.indexOf(t.source.id) == -1) linkSet.push(t.source.id)
+                        if (linkSet.indexOf(t.target.id) == -1) linkSet.push(t.target.id)
                     } else {
                         d3.select("#link" + i)
                             .attr('class', 'link')
+                            .classed('link-hidden', true)
                     }
                 })
+                for (var i = 0; i < 85; i++) {
+                    if (linkSet.indexOf(i) == -1) {
+                        d3.select("#node" + i).classed('nodeShown', false)
+                            .classed('nodeHidden', true)
+                        d3.select('#circle' + i).classed('nodeHighlight', false)
+                    }
+                    else {
+                        d3.select("#node" + i).classed('nodeHidden', false)
+                            .classed('nodeShown', true)
+                        d3.select('#circle' + i).classed('nodeHighlight', true)
+                        if (i == d.id) d3.select('#circle' + i).classed('nodedeCentered', false).classed('nodeCentered', true)
+                    }
+                }
                 d3.select('.imagefit').attr('src', 'resource/images/' + d.id + '.jpg')
                 document.getElementById('ArtistLink').innerHTML = linkNum;
                 document.getElementById('ArtistName').innerHTML = graph.nodes[d.id].name;
@@ -258,14 +268,24 @@ d3.json("data/connections.json", function(error, data) {
                 document.getElementById('ArtistLikes').innerHTML = artistInfo[d.id].likes.length > 0 ? artistInfo[d.id].likes : '-';
             }
         })
-        .on('mouseout', function(d) {
+        .on('mouseout', function (d) {
             if (!lockedLink) {
                 d3.select("#name" + d.id).attr('class', 'op0')
-                isChosen = false;
-                graph.links.slice(0, edgeNum).forEach(function(t, i) {
+                graph.links.slice(0, edgeNum).forEach(function (t, i) {
                     if (t.source.id == d.id || t.target.id == d.id)
                         d3.select("#link" + i)
+                            .attr('class', 'link')
+                })
+                for (var i = 0; i < 85; i++) {
+                    d3.select("#node" + i).classed('nodeHidden', false);
+                    d3.select("#node" + i).classed('nodeShown', true);
+                    d3.select('#circle' + i).classed('nodeHighlight', false)
+                    if (i == d.id) d3.select('#circle' + i).classed('nodeCentered', false).classed('nodedeCentered', true)
+                }
+                graph.links.slice(0, edgeNum).forEach(function (t, i) {
+                    d3.select("#link" + i)
                         .attr('class', 'link')
+                        .classed('link-hidden', false)
                 })
             }
         })
@@ -273,27 +293,19 @@ d3.json("data/connections.json", function(error, data) {
             .on("start", dragstarted)
             .on("drag", dragged)
             .on("end", dragended))
-
     graphContainer
         .nodes(nodes)
         .on("tick", ticked);
-
     graphContainer.force("link")
         .links(links);
-
     function ticked() {
         link.attr("d", positionLink);
         node.attr("transform", positionNode);
     }
     for (var i = 0; i < 85; i++) {
         d3.select('#node' + i)
-            .append('circle').attr('r', '6px').attr('id', function(d) {
-                return "circle" + i;
-            }).attr("fill", function(d) {
-                return color(graph.nodes[i].group);
-            })
+            .append('circle').attr('r', '6px').attr('id', "circle" + i).attr("fill", colorSet[graph.nodes[i].group])
             .classed('borderedNode', true)
-
         var ctn = d3.select('#node' + i)
             .append('g').attr('id', 'name' + i)
             .attr('transform', 'translate(' + -48 + ',' + 16 + ')')
@@ -307,11 +319,9 @@ d3.json("data/connections.json", function(error, data) {
             .attr('rx', '3px')
             .attr('ry', '3px')
         ctn.append('text').text(graph.nodes[i].name).attr('fill', 'black').attr('transform', 'translate(' + 12 + ',' + 17.8 + ')')
-
     }
 });
 var lockedLink;
-
 function positionLink(d) {
     if (!forceGraph_Configs.renderStraightLine)
         return "M" + d[0].x + "," + d[0].y +
@@ -320,11 +330,9 @@ function positionLink(d) {
     return "M" + d[0].x + "," + d[0].y +
         "L" + d[2].x + "," + d[2].y;
 }
-
 function positionNode(d) {
     return "translate(" + d.x + "," + d.y + ")";
 }
-
 function dragstarted(d) {
     lockedLink = true;
     if (!d3.event.active)
@@ -332,23 +340,25 @@ function dragstarted(d) {
     d.fx = d.x, d.fy = d.y;
     forceGraph_Configs.startRatio = 0.3;
 }
-
 function dragged(d) {
     d.fx = d3.event.x, d.fy = d3.event.y;
 }
-
 function dragended(d) {
     lockedLink = false;
     for (var i = 0; i < edgeNum; i++)
         d3.select("#link" + i)
-        .attr('class', 'link')
+            .attr('class', 'link')
     d3.select("#name" + d.id).attr('class', 'op0')
+    for (var i = 0; i < 85; i++) {
+        d3.select("#node" + i).classed('nodeHidden', false);
+        d3.select("#node" + i).classed('nodeShown', true);
+        d3.select('#circle' + i).classed('nodeCentered', false).classed('nodedeCentered', true)
+    }
     if (!d3.event.active) graphContainer.stepRatio(0);
     d.fx = null, d.fy = null;
 }
-
 var artistInfo;
-d3.json('data/artists.json', function(error, data) {
+d3.json('data/artists.json', function (error, data) {
     if (error) throw error;
     artistInfo = data;
 })
