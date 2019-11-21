@@ -251,7 +251,7 @@ d3.json("data/connections.json", function (error, data) {
     var link = svg.selectAll(".link")
         .data(b_l)
         .enter().append("path")
-        .attr("class", "link")
+        .attr("stroke", "rgb(190,190,190)")
         .attr("id", function (e, i) { return "link" + i })
     //.attr('stroke', 'rgba(190, 190, 190, .9)')
 
@@ -439,16 +439,16 @@ function FadeInNode(id) {
     d3.select("#circle" + id).attr('opacity', 1);
 }
 function HighlightEdge(id) {
-    d3.select("#link" + id).attr('class', 'link-highlighted');
+    d3.select("#link" + id).attr('stroke', 'rgb(255,81,12)').attr('stroke-width','2px')
 }
 
 function De_HighlightEdge(id) {
-    d3.select("#link" + id).attr('class', 'link-highlighted-to-normal');
+    d3.select("#link" + id).attr('stroke', 'rgb(190,190,190)').attr('stroke-width','1px')
 }
 
 function FadeOutEdge(id) {
-    d3.select("#link" + id).attr('opacity', .2);
+    d3.select("#link" + id).attr('stroke', 'rgba(220,220,220,.5)');
 }
 function FadeInEdge(id) {
-    d3.select("#link" + id).attr('opacity', 1);
+    d3.select("#link" + id).attr('stroke', 'rgb(190,190,190)');
 }
