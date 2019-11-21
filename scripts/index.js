@@ -5,7 +5,7 @@ function bodyScroll(event) {
 const colorSet = ['#ffcdd2', '#ff8a65', '#ffb300', '#ff9800', '#ff4081', '#d500f9', '#512da8', '#536dfe', '#2196f3',
     '#26c6da', '#00695c', '#1de9b6', '#00e676', '#ffeb3b', '#c6ff00', '#c51162', '#f4511e', '#ef5350', '#f48fb1', '#ffcc80', '#90a4ae', '#33691e']
 
-var svg = d3.select("svg").attr('width', Math.max(window.innerWidth, 1300))
+var svg = d3.select("svg").attr('width', Math.max(window.innerWidth, 2000))
 width = +svg.attr("width"),
     height = +svg.attr("height");
 var forceGraph_Configs = {
@@ -221,7 +221,7 @@ d3.json("data/connections.json", function (error, data) {
     if (error) throw error;
     graphContainer.force("link", calLink().distance(20).strength(0.2))
         .force("charge", d3.forceManyBody())
-        .force("center", d3.forceCenter(680, 420));
+        .force("center", d3.forceCenter(900, 600));
     graph = data;
     edgeNum = data.links.length;
 
@@ -231,7 +231,7 @@ d3.json("data/connections.json", function (error, data) {
             return d.id;
         }),
         links = graph.links,
-        bilinks = [];
+        b_l = [];
 
     links.forEach(function (link) {
         var s = link.source = nodeById.get(link.source),
@@ -245,11 +245,11 @@ d3.json("data/connections.json", function (error, data) {
             source: i,
             target: t
         });
-        bilinks.push([s, i, t]);
+        b_l.push([s, i, t]);
     });
 
     var link = svg.selectAll(".link")
-        .data(bilinks)
+        .data(b_l)
         .enter().append("path")
         .attr("class", "link")
         .attr("id", function (e, i) { return "link" + i })
